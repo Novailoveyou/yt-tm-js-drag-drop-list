@@ -1,0 +1,126 @@
+@import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap');
+
+:root {
+  --border-color: #e3e5e4;
+  --background-color: #c3c7ca;
+  --text-color: #34444f;
+}
+
+*,
+*:before,
+*:after {
+  box-sizing: inherit;
+}
+
+html {
+  box-sizing: border-box;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  text-align: center;
+  min-height: 100vh;
+  margin: 0;
+  padding: 0 1rem;
+  font-family: 'Lato', sans-serif;
+  font-size: 1rem;
+  background-color: #fff;
+}
+
+.draggable-list {
+  padding: 0;
+  list-style-type: none;
+  color: var(--text-color);
+}
+
+.draggable-list__item {
+  display: flex;
+  flex: 1;
+  background-color: #fff;
+}
+
+.draggable-list__item.over .btn__draggable {
+  background-color: #eaeaea;
+}
+
+.draggable-list__item.right .draggable__person-name {
+  color: #3ae374;
+}
+
+.draggable-list__item.wrong .draggable__person-name {
+  color: #ff3838;
+}
+
+.item__btn {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: 0;
+  border-top: 1px solid transparent;
+  border-right: 1px solid var(--border-color);
+  border-left: 1px solid var(--border-color);
+  border-bottom: 1px solid var(--border-color);
+  font-size: 1rem;
+  background-color: transparent;
+  cursor: pointer;
+}
+
+.item__btn:nth-child(1) {
+  border-top-color: var(--border-color);
+}
+
+.item__btn:active {
+  transform: scale(0.98);
+}
+
+.item__btn:focus-visible {
+  outline: none;
+  border-bottom-color: var(--text-color);
+  border-right-color: var(--text-color);
+  transform: scale(1.02);
+}
+
+.btn__number {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 3.75rem;
+  height: 3.75rem;
+  font-size: 1.75rem;
+  background-color: var(--background-color);
+}
+
+.draggable__person-name {
+  margin: 0 1.25rem 0 0;
+}
+
+.btn__draggable {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex: 1;
+  padding: 0.9375rem;
+}
+
+.check-btn {
+  padding: 0.625rem 1.25rem;
+  border: 1px solid transparent;
+  font-size: 1rem;
+  background-color: var(--background-color);
+  color: var(--text-color);
+  cursor: pointer;
+}
+
+.check-btn:active {
+  transform: scale(0.98);
+}
+
+.check-btn:focus-visible {
+  outline: none;
+  border-bottom-color: var(--text-color);
+  border-right-color: var(--text-color);
+  transform: scale(1.02);
+}

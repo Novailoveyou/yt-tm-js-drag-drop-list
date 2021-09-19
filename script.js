@@ -49,16 +49,18 @@ const UICtrl = (() => {
         const listItem = document.createElement('li')
 
         listItem.setAttribute('data-idx', idx)
-        listItem.classList.add('list-item')
+        listItem.classList.add('draggable-list__item')
 
         listItem.innerHTML = /* html */ `
-        <span class='list-item__number'>
-          ${idx + 1}
-        </span>
-        <div class='list-item__draggable' draggable='true'>
-          <p class='draggable__person-name'>${lang}</p>
-          <i class='fas fa-grip-lines'></i>
-        </div>
+        <button class='item__btn'>
+          <span class='btn__number'>
+            ${idx + 1}
+          </span>
+          <div class='btn__draggable' draggable='true'>
+            <p class='draggable__person-name'>${lang}</p>
+            <i class='fas fa-grip-lines'></i>
+          </div>
+        </button>
       `
 
         listItems.push(listItem)
