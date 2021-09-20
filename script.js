@@ -92,7 +92,12 @@ const UICtrl = (() => {
 
   const dragDrop = function () {
     const dragEndIndex = +this.getAttribute('data-idx')
-    swapItems(dragStartIndex, dragEndIndex)
+    swapItems({
+      fromIndex: dragStartIndex,
+      toIndex: dragEndIndex,
+      listItems,
+      selector: draggables
+    })
 
     this.classList.remove('over')
   }
@@ -105,12 +110,12 @@ const UICtrl = (() => {
     this.classList.remove('over')
   }
 
-  const swapItems = (fromIndex, toIndex) => {
-    const itemOne = listItems[fromIndex].childNodes[1]
-    const itemTwo = listItems[toIndex].childNodes[1]
+  const swapItems = ({ fromIndex, toIndex, listItems, selector }) => {
+    const itemOne = listItems[fromIndex].querySelector(selector)
+    const itemTwo = listItems[toIndex].querySelector(selector)
 
-    listItems[fromIndex].appendChild(itemTwo)
-    listItems[toIndex].appendChild(itemOne)
+    listItems[fromIndex].childNodes[1].appendChild(itemTwo)
+    listItems[toIndex].childNodes[1].appendChild(itemOne)
   }
 
   return {
