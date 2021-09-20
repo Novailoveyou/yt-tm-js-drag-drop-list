@@ -1,18 +1,27 @@
 const UISelectors = (() => {
+  const dqs = selector => {
+    return document.querySelector(selector)
+  }
+
+  const dqsa = selectors => {
+    return document.querySelectorAll(selectors)
+  }
+
   const selectors = {
-    draggableList: document.querySelector('#draggable-list'),
-    check: document.querySelector('#check')
+    draggableList: '#draggable-list',
+    check: '#check',
+    draggables: '.btn__draggable',
+    dragListItems: '.draggable-list__item'
   }
 
   return {
+    dqs,
+    dqsa,
     getSelectors: () => selectors
   }
 })()
 
 const ItemCtrl = (() => {
-  const { getSelectors } = UISelectors
-  const selectors = getSelectors()
-
   const languages = [
     'JavaScript',
     'Python',
@@ -32,13 +41,17 @@ const ItemCtrl = (() => {
 
   return {
     getLanguages: () => languages,
-    getListItems: () => listItems
+    getListItems: () => listItems,
+    getDragStartIndex: () => dragStartIndex
   }
 })()
 
 const UICtrl = (() => {
   const { getSelectors } = UISelectors
-  const selectors = getSelectors()
+  const { getDragStartIndex, getListItems } = ItemCtrl
+  const { draggables } = getSelectors()
+  let dragStartIndex = getDragStartIndex()
+  const listItems = getListItems()
 
   const createList = ({ arr, listItems, uiList }) => {
     ;[...arr]
@@ -58,7 +71,7 @@ const UICtrl = (() => {
           </span>
           <div class='btn__draggable' draggable='true'>
             <p class='draggable__person-name'>${lang}</p>
-            <i class='fas fa-grip-lines'></i>
+            <i class='fas fa-grip-lines draggable__icon'></i>
           </div>
         </button>
       `
@@ -69,31 +82,83 @@ const UICtrl = (() => {
       })
   }
 
+  const dragStart = function () {
+    dragStartIndex = +this.closest('li').getAttribute('data-idx')
+  }
+
+  const dragOver = e => {
+    e.preventDefault()
+  }
+
+  const dragDrop = function () {
+    const dragEndIndex = +this.getAttribute('data-idx')
+    swapItems(dragStartIndex, dragEndIndex)
+
+    this.classList.remove('over')
+  }
+
+  const dragEnter = function () {
+    this.classList.add('over')
+  }
+
+  const dragLeave = function () {
+    this.classList.remove('over')
+  }
+
+  const swapItems = (fromIndex, toIndex) => {
+    const itemOne = listItems[fromIndex].childNodes[1]
+    const itemTwo = listItems[toIndex].childNodes[1]
+
+    listItems[fromIndex].appendChild(itemTwo)
+    listItems[toIndex].appendChild(itemOne)
+  }
+
   return {
-    createList
+    createList,
+    dragStart,
+    dragOver,
+    dragDrop,
+    dragEnter,
+    dragLeave
   }
 })()
 
-const App = ((ItemCtrl, UICtrl) => {
-  const { getSelectors } = UISelectors
+const App = ((UISelectors, ItemCtrl, UICtrl) => {
+  const { dqs, dqsa, getSelectors } = UISelectors
   const { getLanguages, getListItems } = ItemCtrl
-  const { createList } = UICtrl
+  const { createList, dragStart, dragOver, dragDrop, dragEnter, dragLeave } =
+    UICtrl
+  const { draggables, dragListItems, draggableList } = getSelectors()
+
+  const loadEventListeners = () => {
+    dqsa(draggables).forEach(draggable => {
+      draggable.addEventListener('dragstart', dragStart)
+    })
+
+    dqsa(dragListItems).forEach(item => {
+      item.addEventListener('dragover', dragOver)
+      item.addEventListener('drop', dragDrop)
+      item.addEventListener('dragenter', dragEnter)
+      item.addEventListener('dragleave', dragLeave)
+    })
+  }
 
   const init = () => {
-    const selectors = getSelectors()
     const languages = getLanguages()
     const listItems = getListItems()
 
     createList({
       arr: languages,
       listItems,
-      uiList: selectors.draggableList
+      uiList: dqs(draggableList)
     })
+
+    loadEventListeners()
   }
 
   return {
     init
   }
-})(ItemCtrl, UICtrl)
+})(UISelectors, ItemCtrl, UICtrl)
 
 App.init()

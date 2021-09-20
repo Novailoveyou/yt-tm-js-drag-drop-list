@@ -42,7 +42,7 @@ body {
   background-color: #fff;
 }
 
-.draggable-list__item.over .btn__draggable {
+.draggable-list__item.over {
   background-color: #eaeaea;
 }
 
@@ -95,6 +95,11 @@ body {
 
 .draggable__person-name {
   margin: 0 1.25rem 0 0;
+  pointer-events: none;
+}
+
+.draggable__icon {
+  pointer-events: none;
 }
 
 .btn__draggable {
@@ -102,6 +107,7 @@ body {
   justify-content: space-between;
   align-items: center;
   flex: 1;
+  height: 100%;
   padding: 0.9375rem;
 }
 
