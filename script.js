@@ -48,8 +48,9 @@ const ItemCtrl = (() => {
 
 const UICtrl = (() => {
   const { getSelectors } = UISelectors
-  const { getDragStartIndex, getListItems } = ItemCtrl
+  const { getLanguages, getDragStartIndex, getListItems } = ItemCtrl
   const { draggables } = getSelectors()
+  const languages = getLanguages()
   let dragStartIndex = getDragStartIndex()
   const listItems = getListItems()
 
@@ -118,22 +119,43 @@ const UICtrl = (() => {
     listItems[toIndex].childNodes[1].appendChild(itemOne)
   }
 
+  const checkOrder = () => {
+    listItems.forEach((item, idx) => {
+      const name = item.querySelector(draggables).innerText.trim()
+
+      if (name !== languages[idx]) {
+        item.classList.add('wrong')
+      } else {
+        item.classList.remove('wrong')
+        item.classList.add('right')
+      }
+    })
+  }
+
   return {
     createList,
     dragStart,
     dragOver,
     dragDrop,
     dragEnter,
-    dragLeave
+    dragLeave,
+    checkOrder
   }
 })()
 
 const App = ((UISelectors, ItemCtrl, UICtrl) => {
   const { dqs, dqsa, getSelectors } = UISelectors
   const { getLanguages, getListItems } = ItemCtrl
-  const { createList, dragStart, dragOver, dragDrop, dragEnter, dragLeave } =
-    UICtrl
-  const { draggables, dragListItems, draggableList } = getSelectors()
+  const {
+    createList,
+    dragStart,
+    dragOver,
+    dragDrop,
+    dragEnter,
+    dragLeave,
+    checkOrder
+  } = UICtrl
+  const { check, draggables, dragListItems, draggableList } = getSelectors()
 
   const loadEventListeners = () => {
     dqsa(draggables).forEach(draggable => {
@@ -146,6 +168,8 @@ const App = ((UISelectors, ItemCtrl, UICtrl) => {
       item.addEventListener('dragenter', dragEnter)
       item.addEventListener('dragleave', dragLeave)
     })
+
+    dqs(check).addEventListener('click', checkOrder)
   }
 
   const init = () => {
